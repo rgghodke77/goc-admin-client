@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import './login.css';
 import {
   Badge,
@@ -27,7 +27,9 @@ import Form from 'react-bootstrap/Form';
 // };
 
 const LoginPage = ({
-  loginUser
+  loginUser,
+  getGames,
+  loginResponse
 })=> {
   const history = useHistory();
   // const [username, setUserName] = React.useState('');
@@ -42,7 +44,6 @@ const LoginPage = ({
   const password = useRef();
   const loginSubmit = e => {
     e.preventDefault();
-    //history.push('/admin')
     setState({...state,loading:true})
     loginUser({
       "mobile":mobileNumber.current.value,
@@ -50,9 +51,17 @@ const LoginPage = ({
       "platform":"w"
   
   })
-    // setToken(token);
-  }
+    }
 
+  useEffect(()=>{
+    if(loginResponse && loginResponse === 1) {
+      history.push('/admin')
+  
+    }
+  },[loginResponse])
+  useEffect(()=>{
+    getGames()
+  },[])
   return (
     <div className="container-fluid-block w-100">
 
@@ -65,14 +74,14 @@ const LoginPage = ({
         }
         <Container fluid className="login-container-fluid logo-background mt-5">
         <Row className="d-flex"> 
-                <Col lg= {6} className="col d-flex justify-content-center align-items-center">
-                <div className="logo-img-tag">
+                <Col lg= {6} className="col" style={{width:'100%'}}>
+                <div className="logo-img-tag image-position">
                 <img src={require("assets/img/goc2.png")} alt="..." />
                 </div>
                 </Col>
-            <Col className="ml-auto mr-auto d-flex align-items-center justify-content-center" lg={6}>
-              <div className="form-block" style={{ width: '50%' }}>
-                <Card style={{ padding: '50px' }}>
+            <Col className="ml-auto mr-auto d-flex justify-content-end" lg={6}>
+              <div className="form-block" style={{width:'70%'}}>
+              <Card style={{padding : '30px'}}> 
                   <form id="loginform" onSubmit={loginSubmit}>
                     <div className="form-group">
                       <label>UserName</label>
